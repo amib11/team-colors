@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>グループワークタイプ診断</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f1ea;--card:#fff;--tx:#2b2a33;--mu:#6d6b78;--ag:#33a474;--di:#88619a;--ac:#4298b4;--ln:#e2ded3;color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1c22;--card:#2a2931;--tx:#ecebf1;--mu:#a3a1b0;--ln:#3b3a45;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1c22;--card:#2a2931;--tx:#ecebf1;--mu:#a3a1b0;--ln:#3b3a45;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;line-height:1.7}
+header{padding:14px 20px;font-weight:700;display:flex;gap:8px;align-items:center}
+header i{display:inline-grid;grid-template-columns:repeat(2,10px);gap:3px}
+header i b{width:10px;height:10px;border-radius:50%}
+main{max-width:720px;margin:0 auto;padding:8px 16px 60px}
+.card{background:var(--card);border-radius:18px;padding:24px 20px;box-shadow:0 2px 14px rgba(0,0,0,.07);margin-bottom:16px}
+h1{font-size:1.7rem;line-height:1.35;margin:.2em 0}
+h2{font-size:1.25rem;margin:.2em 0 .6em}
+p{margin:.5em 0}.mu{color:var(--mu);font-size:.92rem}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:12px 30px;background:var(--ac);color:#fff;font-weight:700}
+button:disabled{opacity:.35;cursor:not-allowed}
+button.sub{background:transparent;color:var(--mu);border:1px solid var(--ln)}
+.bar{height:8px;background:var(--ln);border-radius:9px;overflow:hidden;margin:6px 0 18px}
+.bar div{height:100%;background:var(--ac);transition:width .3s}
+.q{padding:22px 0;border-bottom:1px solid var(--ln);text-align:center}
+.q:last-of-type{border:0}
+.q p.t{font-size:1.08rem;font-weight:600;margin:0 0 14px}
+.sc{display:flex;align-items:center;justify-content:center;gap:clamp(6px,2.4vw,16px)}
+.sc span{font-size:.78rem;font-weight:700;width:2.6em}
+.sc .l{color:var(--ag)}.sc .r{color:var(--di)}
+.dot{border-radius:50%;border:3px solid;background:transparent;padding:0;flex:none}
+.dot.a{border-color:var(--ag)}.dot.d{border-color:var(--di)}.dot.n{border-color:var(--mu)}
+.dot.a.on{background:var(--ag)}.dot.d.on{background:var(--di)}.dot.n.on{background:var(--mu)}
+.nav{display:flex;justify-content:space-between;margin-top:18px}
+.hero{font-size:3rem;text-align:center}
+.tag{display:inline-block;background:var(--ac);color:#fff;border-radius:999px;padding:2px 14px;font-size:.85rem;font-weight:700}
+.ax{margin:16px 0}.ax .h{display:flex;justify-content:space-between;font-weight:700;font-size:.95rem}
+.ax .tr{height:14px;background:var(--di);border-radius:9px;overflow:hidden;margin-top:4px}
+.ax .tr div{height:100%;background:var(--ag)}
+ul{padding-left:1.2em;margin:.4em 0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair div{background:var(--bg);border-radius:12px;padding:10px 14px;font-size:.93rem}
+.all{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.88rem}
+.all div{background:var(--bg);border-radius:10px;padding:8px 10px}
+@media(max-width:480px){.pair,.all{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><i><b style="background:#88619a"></b><b style="background:#4298b4"></b><b style="background:#e4ae3a"></b><b style="background:#33a474"></b></i>グループワークタイプ診断</header>
+<main id="app"></main>
+<script>
+// 軸: A=発言(T話す/L聞く) B=関心(H人/G成果) C=進め方(I発想/P計画)  d=+1:同意で前者、-1:同意で後者
+var Q=[
+["A",1,"グループワークでは、自分から最初に意見を言うほうだ。"],["A",-1,"発言する前に、頭の中で整理してからでないと話せない。"],["A",1,"沈黙が続くと、つい自分が話し始めてしまう。"],["A",-1,"大人数の場では、聞き役に回ることが多い。"],["A",1,"話しながら考えをまとめるタイプだ。"],["A",1,"初対面の人にも気軽に話しかけられる。"],["A",-1,"間違っていないか不安で、発言をためらうことがある。"],["A",1,"議論では、気づけば自分が一番話している。"],["A",-1,"タイミングを逃して、言えずに終わることがよくある。"],["A",1,"みんなの前で意見を言うのは苦にならない。"],["A",-1,"口頭よりチャットなど文字のほうが意見を言いやすい。"],["A",1,"反対意見でも、その場で口に出せる。"],["A",-1,"人の話を最後までじっくり聞くほうが落ち着く。"],["A",1,"授業や会議で、手を挙げて発言することが多い。"],["A",-1,"話を振られるまで、自分からは話さないことが多い。"],["A",1,"雑談から議論へ、自然に話を広げられる。"],["A",-1,"話が盛り上がっていると、割り込むのが難しい。"],
+["B",1,"メンバー全員が発言できているか、つい気にしてしまう。"],["B",-1,"議論が脱線しても、結論に近づくなら気にならない。"],["B",1,"意見が対立すると、場の空気を和らげたくなる。"],["B",-1,"時間内に結論を出すことを最優先に考える。"],["B",1,"困っていそうな人がいると、すぐ声をかける。"],["B",-1,"グループの雰囲気より、成果物の質のほうが大事だ。"],["B",1,"メンバーと仲良くなれると、やる気が上がる。"],["B",-1,"非効率だと感じたら、はっきり指摘する。"],["B",1,"発言の少ない人に「どう思う？」と振ることがある。"],["B",1,"相手が傷つくかもと思うと、意見を柔らかく言い直す。"],["B",-1,"役割分担は、公平さより得意不得意で決めたい。"],["B",1,"チームの人間関係が悪いと、作業に集中できない。"],["B",-1,"感情より、事実やデータをもとに話し合いたい。"],["B",1,"メンバーの意見は、できるだけ全部拾いたい。"],["B",-1,"締め切り前は、多少強引でも進めるべきだと思う。"],["B",1,"グループワークは成果と同じくらい、過程を楽しみたい。"],["B",-1,"仲が良くても、成果が出ないなら役割を厳しく見直す。"],
+["C",1,"突飛なアイデアを考えるのが好きだ。"],["C",-1,"作業は、先にスケジュールを立ててから始めたい。"],["C",1,"ブレインストーミングでは、量を出すのが得意だ。"],["C",-1,"前例や実績のある方法を選ぶと安心する。"],["C",1,"「もしこうだったら？」とよく想像する。"],["C",-1,"やることリストを作って、一つずつ消すのが好きだ。"],["C",1,"話し合いの途中で、新しい案が次々に浮かぶ。"],["C",-1,"アイデアより、実現できるかどうかが気になる。"],["C",1,"計画が途中で変わっても、むしろ楽しめる。"],["C",-1,"担当や期限があいまいだと落ち着かない。"],["C",1,"まず試してみて、やりながら考えるほうだ。"],["C",-1,"細かい部分まで確認してから提出したい。"],["C",1,"みんなが思いつかない切り口を見つけると嬉しい。"],["C",-1,"議事録や進捗の管理は苦にならない。"],["C",1,"完成形が見えなくても、とりあえず動き出せる。"],["C",-1,"決めたルールや手順は、きちんと守りたい。"]];
+var T={
+THI:["🎉","ムードメーカー","場を明るくし、アイデアを次々に出す人","話す人","明るさと発想力で、議論のスタート地点をつくれます。","他のメンバーの発言時間も意識すると、さらに良い場になります。","LGP 堅実な職人 / LHP 縁の下のサポーター"],
+THP:["🔄","まわし上手","全員に発言の機会をつくり、話を回す人","回す人","傾聴と調整が得意で、チームの発言バランスを整えられます。","自分の意見も、遠慮せず出してみましょう。","LHI ひらめきサポーター / LGI ひそかな戦略家"],
+TGI:["🚀","切り込み隊長","どんどん提案して、議論を前に進める人","話す人","決断が早く、停滞した場面を動かす推進力があります。","ひらめきを共有した後は、周りの反応を聞く時間を取りましょう。","LHP 縁の下のサポーター / THP まわし上手"],
+TGP:["🧭","司令塔","ゴールから逆算し、段取りと役割を決める人","話す人","計画力と実行力で、チームの方向性を示せます。","方針を決める前に、静かなメンバーの意見も確認しましょう。","LGI ひそかな戦略家 / LHI ひらめきサポーター"],
+LHI:["💡","ひらめきサポーター","聞き上手で、ふとした一言がヒントになる人","内気な人","相手の話をよく受け止め、独自の視点を添えられます。","思いついたらメモやチャットで先に出すと、発言しやすくなります。","THP まわし上手 / TGP 司令塔"],
+LHP:["🤝","縁の下のサポーター","気配りとフォローで、チームを支える人","内気な人","メンバーの状況に気づき、記録や調整を着実にこなします。","自分の考えも、小さくてよいので声にしてみましょう。","THI ムードメーカー / TGI 切り込み隊長"],
+LGI:["🔭","ひそかな戦略家","口数は少なくても、鋭い視点を持つ人","内気な人","全体を見渡し、本質を突く案を出せます。","考えを温めすぎず、早めに一言共有できると強力です。","THP まわし上手 / TGP 司令塔"],
+LGP:["🔧","堅実な職人","任された作業を、コツコツ高品質に仕上げる人","内気な人","正確さと責任感で、成果物の質を支えます。","困ったら早めに相談する習慣をつけると安心です。","THI ムードメーカー / TGI 切り込み隊長"]};
+var ans=[],page=0,PER=10,app=document.getElementById("app");
+var SZ=[46,36,28,22,28,36,46];
+function intro(){app.innerHTML='<div class="card"><div class="hero">🗣️</div><h1>グループワークタイプ診断</h1><p>全50問。直感で答えてください（所要時間：約8分）。</p><p class="mu">「話す・聞く」「人・成果」「発想・計画」の3つの軸から、あなたのグループワークでの役割タイプを調べます。結果はチーム編成に使えます。</p><p><button id="go">診断をはじめる</button></p></div>';document.getElementById("go").onclick=function(){page=0;ask()}}
+function ask(){
+ var s=page*PER,e=Math.min(s+PER,Q.length),h='<div class="mu">'+Math.round(done()/Q.length*100)+'% 完了</div><div class="bar"><div style="width:'+done()/Q.length*100+'%"></div></div><div class="card">';
+ for(var i=s;i<e;i++){h+='<div class="q"><p class="t">'+Q[i][2]+'</p><div class="sc"><span class="l">同意</span>';
+  for(var k=0;k<7;k++){var c=k<3?"a":k>3?"d":"n";h+='<button class="dot '+c+(ans[i]===k?" on":"")+'" style="width:'+SZ[k]+'px;height:'+SZ[k]+'px" data-q="'+i+'" data-k="'+k+'" aria-label="'+(k+1)+'"></button>'}
+  h+='<span class="r">反対</span></div></div>'}
+ h+='</div><div class="nav"><button class="sub" id="bk"'+(page?'':' disabled')+'>戻る</button><button id="nx" disabled>'+(e>=Q.length?"結果を見る":"次へ")+'</button></div>';
+ app.innerHTML=h;window.scrollTo(0,0);
+ app.querySelectorAll(".dot").forEach(function(b){b.onclick=function(){ans[+b.dataset.q]=+b.dataset.k;var q=b.closest(".q");q.querySelectorAll(".dot").forEach(function(x){x.classList.remove("on")});b.classList.add("on");upd(s,e)}});
+ document.getElementById("bk").onclick=function(){page--;ask()};
+ document.getElementById("nx").onclick=function(){if(e>=Q.length)result();else{page++;ask()}};upd(s,e)}
+function done(){var n=0;for(var i=0;i<Q.length;i++)if(ans[i]!==undefined)n++;return n}
+function upd(s,e){var ok=true;for(var i=s;i<e;i++)if(ans[i]===undefined)ok=false;document.getElementById("nx").disabled=!ok}
+function result(){
+ var sum={A:0,B:0,C:0},n={A:0,B:0,C:0};
+ Q.forEach(function(q,i){sum[q[0]]+=(3-ans[i])*q[1];n[q[0]]++});
+ var p={};["A","B","C"].forEach(function(a){p[a]=Math.round(50+sum[a]/(n[a]*3)*50)});
+ var key=(p.A>=50?"T":"L")+(p.B>=50?"H":"G")+(p.C>=50?"I":"P"),t=T[key];
+ var L=[["A","話す","聞く"],["B","人を重視","成果を重視"],["C","発想","計画"]],bars="";
+ L.forEach(function(l){var v=p[l[0]],w=v>=50?v:100-v;bars+='<div class="ax"><div class="h"><span style="color:var(--ag)">'+l[1]+' '+v+'%</span><span style="color:var(--di)">'+(100-v)+'% '+l[2]+'</span></div><div class="tr"><div style="width:'+v+'%"></div></div></div>'});
+ var all="";for(var k in T)all+='<div>'+T[k][0]+' '+T[k][1]+(k===key?' ← あなた':'')+'</div>';
+ app.innerHTML='<div class="card"><div class="hero">'+t[0]+'</div><p style="text-align:center" class="mu">あなたのタイプ</p><h1 style="text-align:center">'+t[1]+'</h1><p style="text-align:center"><span class="tag">グループ内の役割：'+t[3]+'</span></p><p style="text-align:center">'+t[2]+'</p></div>'
+ +'<div class="card"><h2>3つの軸</h2>'+bars+'</div>'
+ +'<div class="card"><h2>強み</h2><p>'+t[4]+'</p><h2>伸ばすヒント</h2><p>'+t[5]+'</p><h2>相性の良いタイプ</h2><p>'+t[6]+'</p></div>'
+ +'<div class="card"><h2>全8タイプ</h2><div class="all">'+all+'</div></div><p style="text-align:center"><button id="rt">もう一度診断する</button></p>';
+ window.scrollTo(0,0);document.getElementById("rt").onclick=function(){ans=[];intro()}}
+intro();
+</script>
+</body>
+</html>
